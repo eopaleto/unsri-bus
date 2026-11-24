@@ -1,0 +1,47 @@
+[
+  {
+    "id": "fe", "name": "Fakultas Ekonomi", "source_url": "https://unsri.ac.id/mahasiswa/daftar-fakultas/1",
+    "programs": ["D3 - Akuntansi", "D3 - Kesekretariatan", "S1 - Ekonomi Pembangunan", "S1 - Akuntansi", "S1 - Manajemen", "Profesi - Profesi Akuntan", "S2 - Ilmu Ekonomi", "S2 - Manajemen", "S2 - Ilmu Akuntansi", "S2 - Ilmu Manajemen", "S3 - Ilmu Manajemen", "S3 - Ilmu Ekonomi"]
+  },
+  {
+    "id": "fh", "name": "Fakultas Hukum", "source_url": "https://unsri.ac.id/mahasiswa/daftar-fakultas/2",
+    "programs": ["S1 - Ilmu Hukum", "S2 - Kenotariatan", "S2 - Ilmu Hukum", "S3 - Ilmu Hukum"]
+  },
+  {
+    "id": "ft", "name": "Fakultas Teknik", "source_url": "https://unsri.ac.id/mahasiswa/daftar-fakultas/3",
+    "programs": ["S1 - Teknik Kimia", "S1 - Teknik Geologi", "S1 - Teknik Sipil", "S1 - Teknik Elektro", "S1 - Arsitektur", "S1 - Teknik Mesin", "S1 - Teknik Pertambangan", "Profesi - Program Profesi Insinyur", "S2 - Teknik Sipil", "S2 - Teknik Pertambangan", "S2 - Teknik Mesin", "S2 - Teknik Kimia", "S3 - Ilmu Teknik"]
+  },
+  {
+    "id": "fk", "name": "Fakultas Kedokteran", "source_url": "https://unsri.ac.id/index.php/akademik/detail-fakultas/4/fakultas-kedokteran",
+    "programs": ["S1 - Kedokteran Gigi", "S1 - Pendidikan Dokter", "S1 - Ilmu Keperawatan", "S1 - Psikologi", "Profesi - Profesi Dokter Gigi", "Profesi - Profesi Ners", "Profesi - Profesi Dokter", "Sp-1 - Ortopedi dan Traumatologi", "Sp-1 - Ilmu Kesehatan Anak", "Sp-1 - Ilmu Penyakit Kulit dan Kelamin", "Sp-1 - Ilmu Penyakit Mata", "Sp-1 - Ilmu Penyakit Syaraf", "Sp-1 - Ilmu Bedah", "Sp-1 - Ilmu Penyakit THT", "Sp-1 - Ilmu Penyakit Dalam", "Sp-1 - Anestesiologi dan Reanimasi", "Sp-1 - Bedah Toraks, Kardiak, dan Vaskular", "Sp-1 - Ilmu Kebidanan dan Penyakit Kandungan", "Sp-1 - Ilmu Patologi Anatomi", "S2 - Biomedik", "Sp-2 - Obstetrik dan Ginekologi", "Sp-2 - Ilmu Penyakit Dalam", "S3 - Sains Biomedis"]
+  },
+  {
+    "id": "fp", "name": "Fakultas Pertanian", "source_url": "https://unsri.ac.id/mahasiswa/daftar-fakultas/5",
+    "programs": ["S1 - Agribisnis", "S1 - Peternakan", "S1 - Ilmu Tanah", "S1 - Proteksi Tanaman", "S1 - Budidaya Perairan", "S1 - Teknik Pertanian", "S1 - Agroekoteknologi", "S1 - Teknologi Hasil Pertanian", "S1 - Agronomi", "S1 - Teknologi Hasil Perikanan", "S2 - Agribisnis", "S2 - Ilmu Tanaman", "S2 - Teknologi Industri Pertanian", "S3 - Ilmu Pertanian"]
+  },
+  {
+    "id": "fkip", "name": "Fakultas Keguruan dan Ilmu Pendidikan", "source_url": "https://unsri.ac.id/mahasiswa/daftar-fakultas/6",
+    "programs": ["S1 - Pendidikan Teknik Mesin", "S1 - Pendidikan Guru Sekolah Dasar", "S1 - Pendidikan Pancasila dan Kewarganegaraan", "S1 - Pendidikan Matematika", "S1 - Pendidikan Jasmani, Kesehatan dan Rekreasi", "S1 - Bimbingan dan Konseling", "S1 - Pendidikan Masyarakat", "S1 - Pendidikan Fisika", "S1 - Pendidikan Biologi", "S1 - Pendidikan Ekonomi", "S1 - Pendidikan Bahasa Inggris", "S1 - Pendidikan Guru Pendidikan Anak Usia Dini", "S1 - Pendidikan Bahasa dan Sastra Indonesia", "S1 - Pendidikan Kimia", "S1 - Pendidikan Sejarah", "Profesi - Pendidikan Profesi Guru", "S2 - Pendidikan Fisika", "S2 - Pendidikan Bahasa", "S2 - Pendidikan Matematika", "S2 - Teknologi Pendidikan", "S2 - Pendidikan Olah Raga", "S3 - Pendidikan Matematika"]
+  },
+  {
+    "id": "fisip", "name": "Fakultas Ilmu Sosial dan Ilmu Politik", "source_url": "https://unsri.ac.id/mahasiswa/daftar-fakultas/7",
+    "programs": ["S1 - Ilmu Komunikasi", "S1 - Sosiologi", "S1 - Ilmu Hubungan Internasional", "S1 - Administrasi Publik", "S2 - Sosiologi", "S2 - Administrasi Publik", "S3 - Administrasi Publik"]
+  },
+  {
+    "id": "fmipa", "name": "Fakultas Matematika dan Ilmu Pengetahuan Alam", "source_url": "https://unsri.ac.id/mahasiswa/daftar-fakultas/8",
+    "programs": ["Profesi - Pendidikan Profesi Apoteker", "S1 - Biologi", "S1 - Farmasi", "S1 - Fisika", "S1 - Ilmu Kelautan", "S1 - Kimia", "S1 - Matematika", "S2 - Biologi", "S2 - Fisika", "S2 - Kimia", "S3 - Ilmu Matematika dan Ilmu Pengetahuan Alam"]
+  },
+  {
+    "id": "fasilkom", "name": "Fakultas Ilmu Komputer", "source_url": "https://unsri.ac.id/mahasiswa/daftar-fakultas/9",
+    "programs": ["D3 - Komputerisasi Akuntansi", "D3 - Teknik Komputer", "D3 - Manajemen Informatika", "S1 - Sistem Informasi", "S1 - Sistem Komputer", "S1 - Teknik Informatika", "S2 - Ilmu Komputer", "S3 - Ilmu Komputer"],
+    "program_sources": {"S3 - Ilmu Komputer": "https://ilkom.unsri.ac.id/department-unit/post-graduate-magister-s2/doktor-ilmu-komputer/"}
+  },
+  {
+    "id": "fkm", "name": "Fakultas Kesehatan Masyarakat", "source_url": "https://unsri.ac.id/mahasiswa/daftar-fakultas/10",
+    "programs": ["S1 - Gizi", "S1 - Kesehatan Masyarakat", "S1 - Kesehatan Lingkungan", "S2 - Ilmu Kesehatan Masyarakat"]
+  },
+  {
+    "id": "pps", "name": "Program Pascasarjana", "source_url": "https://unsri.ac.id/index.php/akademik/detail-fakultas/11/program-pasca-sarjana",
+    "programs": ["S2 - Pengelolaan Lingkungan", "S2 - Ilmu Material", "S2 - Kependudukan", "S3 - Ilmu Lingkungan"]
+  }
+]

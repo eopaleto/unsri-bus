@@ -1,0 +1,42 @@
+{
+  "name": "unsri-bus",
+  "version": "1.0.0",
+  "private": true,
+  "description": "UNSRI Bus — Next.js and Supabase campus transport",
+  "scripts": {
+    "start": "next start",
+    "dev": "next dev",
+    "build": "next build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm run test",
+    "legacy": "node server.js"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.95.0",
+    "lucide-react": "^0.563.0",
+    "next": "^16.4.6",
+    "qrcode": "^1.5.4",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "server-only": "^0.0.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.10",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^22.19.0",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}
