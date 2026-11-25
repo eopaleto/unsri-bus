@@ -15,18 +15,18 @@ export const demoBuses: Bus[] = Array.from({length:5},(_,i)=>({
   id:`bus-${i}`, code:`UB-0${i+1}`, name:`UNSRI Bus 0${i+1}`, plate_number:`BG DEMO ${i+1}`,
   capacity:40, status:i===4?"maintenance":"operating",
 }));
-export function demoSchedules(): Schedule[] {
+export function demoSchedules(referenceDay = today()): Schedule[] {
   return Array.from({length:8},(_,d)=>[8,12,16,18].map((hour,i)=>({
     id:`trip-${d}-${i}`, route_id:demoRoutes[i%2].id, bus_id:demoBuses[i].id,
-    departure_at:`${addDays(today(),d)}T${String(hour).padStart(2,"0")}:00:00+07:00`,
-    arrival_at:`${addDays(today(),d)}T${String(hour+1).padStart(2,"0")}:15:00+07:00`,fare_idr:5000,status:"scheduled",
+    departure_at:`${addDays(referenceDay,d)}T${String(hour).padStart(2,"0")}:00:00+07:00`,
+    arrival_at:`${addDays(referenceDay,d)}T${String(hour+1).padStart(2,"0")}:15:00+07:00`,fare_idr:5000,status:"scheduled",
     routes:demoRoutes[i%2],buses:demoBuses[i],capacity:40,available:[12,20,25,18][i],
   }))).flat();
 }
 export const demoSeats = (s: Schedule): Seat[] => Array.from({length:40},(_,i)=>({
   id:`${s.id}-seat-${i}`,seat_label:`${"ABCD"[i%4]}${Math.floor(i/4)+1}`,row_no:Math.floor(i/4)+1,col_no:i%4+1,occupied:i>=s.available,
 }));
-export function demoBooking(schedules: Schedule[]): Booking[] {
-  const s = schedules.find(s=>new Date(s.departure_at).getTime()>Date.now()+3600000);
-  return s ? [{ id:"demo-ticket",booking_code:"DEMO-UNSRI-001",student_id:demoProfile.id,status:"confirmed",created_at:new Date().toISOString(),schedules:s,schedule_seats:{seat_label:"B2"},pickup:s.routes.route_stops[0].stops,dropoff:s.routes.route_stops[1].stops,profiles:demoProfile }] : [];
+export function demoBooking(schedules: Schedule[], now = Date.now()): Booking[] {
+  const s = schedules.find(s=>new Date(s.departure_at).getTime()>now+3600000);
+  return s ? [{ id:"demo-ticket",booking_code:"DEMO-UNSRI-001",student_id:demoProfile.id,status:"confirmed",created_at:new Date(now).toISOString(),schedules:s,schedule_seats:{seat_label:"B2"},pickup:s.routes.route_stops[0].stops,dropoff:s.routes.route_stops[1].stops,profiles:demoProfile }] : [];
 }

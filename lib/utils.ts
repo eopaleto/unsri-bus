@@ -1,4 +1,4 @@
-export const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+export const today = (date = new Date()) => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta", year: "numeric", month: "2-digit", day: "2-digit" }).format(date);
 export const dateKey = (value: string) => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(value));
 export const dateLabel = (value: string, short = false) => new Date(value.length === 10 ? value + "T12:00:00+07:00" : value).toLocaleDateString("id-ID", { timeZone: "Asia/Jakarta", ...(short ? {} : { weekday: "long" }), day: "numeric", month: short ? "short" : "long", year: "numeric" });
 export const timeLabel = (value: string) => new Date(value).toLocaleTimeString("id-ID", { timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit", hour12: false }).replace(".", ":");

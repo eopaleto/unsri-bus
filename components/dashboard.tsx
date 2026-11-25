@@ -20,7 +20,6 @@ import {
   dateLabel,
   money,
   timeLabel,
-  today,
 } from "@/lib/utils";
 import { BusIllustration } from "./illustration";
 export function WeekCalendar({
@@ -28,15 +27,17 @@ export function WeekCalendar({
   setSelected,
   offset,
   setOffset,
+  currentDay,
   compact = false,
 }: {
   selected: string;
   setSelected: (s: string) => void;
   offset: number;
   setOffset: (n: number) => void;
+  currentDay: string;
   compact?: boolean;
 }) {
-  const start = addDays(today(), offset);
+  const start = addDays(currentDay, offset);
   return (
     <div className={compact ? "week mobile-week" : "panel calendar-panel"}>
       {!compact && (
@@ -47,6 +48,7 @@ export function WeekCalendar({
           <div className="calendar-month">
             <span>
               {new Date(start + "T12:00:00+07:00").toLocaleDateString("id-ID", {
+                timeZone: "Asia/Jakarta",
                 month: "long",
                 year: "numeric",
               })}
@@ -55,7 +57,7 @@ export function WeekCalendar({
               <button
                 onClick={() => {
                   setOffset(0);
-                  setSelected(today());
+                  setSelected(currentDay);
                 }}
               >
                 Hari ini
@@ -89,11 +91,11 @@ export function WeekCalendar({
             >
               <span>
                 {new Date(day + "T12:00:00+07:00")
-                  .toLocaleDateString("id-ID", { weekday: "short" })
+                  .toLocaleDateString("id-ID", { timeZone: "Asia/Jakarta", weekday: "short" })
                   .slice(0, 3)}
               </span>
               <strong>{Number(day.slice(-2))}</strong>
-              {day === today() && <i />}
+              {day === currentDay && <i />}
             </button>
           );
         })}
@@ -193,10 +195,12 @@ export function ScheduleTable({
   schedules,
   onBook,
   onAll,
+  now,
 }: {
   schedules: Schedule[];
   onBook: (s: Schedule) => void;
   onAll: () => void;
+  now: number;
 }) {
   return (
     <section className="panel available-panel">
@@ -250,10 +254,10 @@ export function ScheduleTable({
                   <td>
                     <button
                       className="button primary small"
-                      disabled={!bookable(s)}
+                      disabled={!bookable(s, now)}
                       onClick={() => onBook(s)}
                     >
-                      {bookable(s)
+                      {bookable(s, now)
                         ? "Pesan"
                         : s.available === 0
                           ? "Penuh"
@@ -290,6 +294,8 @@ export function Dashboard({
   onBook,
   onTicket,
   onFleet,
+  now,
+  currentDay,
 }: {
   bookings: Booking[];
   schedules: Schedule[];
@@ -302,13 +308,15 @@ export function Dashboard({
   onBook: (s: Schedule) => void;
   onTicket: (b: Booking) => void;
   onFleet: () => void;
+  now: number;
+  currentDay: string;
 }) {
   const upcoming = bookings
     .filter(
       (b) =>
         b.status === "confirmed" &&
         b.schedules.status !== "cancelled" &&
-        new Date(b.schedules.departure_at).getTime() > Date.now(),
+        new Date(b.schedules.departure_at).getTime() > now,
     )
     .sort((a, b) =>
       a.schedules.departure_at.localeCompare(b.schedules.departure_at),
@@ -329,6 +337,7 @@ export function Dashboard({
         setSelected={setSelected}
         offset={offset}
         setOffset={setOffset}
+      currentDay={currentDay}
       />
       <div className="dashboard-layout">
         <div className="dashboard-main">
@@ -399,6 +408,7 @@ export function Dashboard({
             schedules={daySchedules}
             onBook={onBook}
             onAll={() => navigate("schedules")}
+            now={now}
           />
           <p className="dashboard-footnote">
             Tarif hanya informasi. Pembayaran belum diproses melalui aplikasi.
@@ -410,11 +420,12 @@ export function Dashboard({
             setSelected={setSelected}
             offset={offset}
             setOffset={setOffset}
+            currentDay={currentDay}
           />
           <section className="panel timeline-panel">
             <div className="panel-heading">
               <h2>
-                {selected === today()
+                {selected === currentDay
                   ? "Jadwal Hari Ini"
                   : `Jadwal ${dateLabel(selected, true)}`}
               </h2>
@@ -447,8 +458,8 @@ export function Dashboard({
                         }
                       </small>
                     </div>
-                    <span className={`tag ${bookable(s) ? "blue" : "grey"}`}>
-                      {bookable(s) ? "Tersedia" : "Ditutup"}
+                    <span className={`tag ${bookable(s, now) ? "blue" : "grey"}`}>
+                      {bookable(s, now) ? "Tersedia" : "Ditutup"}
                     </span>
                   </button>
                 ))

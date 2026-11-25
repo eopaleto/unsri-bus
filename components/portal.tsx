@@ -101,22 +101,26 @@ export function Portal({
   initialProfile,
   initialScreen,
   configured,
+  initialNow,
 }: {
   initialProfile: Profile | null;
   initialScreen: string;
   configured: boolean;
+  initialNow: string;
 }) {
   const demo = initialScreen === "demo";
+  const [now, setNow] = useState(() => new Date(initialNow).getTime());
+  const currentDay = today(new Date(now));
   const [profile, setProfile] = useState<Profile | null>(
     demo ? demoProfile : initialProfile,
   );
   const [page, setPage] = useState("dashboard"),
     [bundle, setBundle] = useState<Bundle>(() => {
       if (!demo) return emptyBundle;
-      const schedules = demoSchedules();
+      const schedules = demoSchedules(today(new Date(initialNow)));
       return {
         schedules,
-        bookings: demoBooking(schedules),
+        bookings: demoBooking(schedules, new Date(initialNow).getTime()),
         buses: demoBuses,
         routes: demoRoutes,
         stops: demoStops,
@@ -126,7 +130,7 @@ export function Portal({
   const [loading, setLoading] = useState(!demo && Boolean(initialProfile)),
     [error, setError] = useState(""),
     [toast, setToast] = useState("");
-  const [date, setDate] = useState(today()),
+  const [date, setDate] = useState(() => today(new Date(initialNow))),
     [offset, setOffset] = useState(0),
     [search, setSearch] = useState(""),
     [route, setRoute] = useState(""),
@@ -146,6 +150,12 @@ export function Portal({
     [chatUnread, setChatUnread] = useState(0);
   const pageRef = useRef(page);
   const [managementTab, setManagementTab] = useState("schedule");
+  useEffect(() => {
+    const refreshNow = () => setNow(Date.now());
+    refreshNow();
+    const interval = window.setInterval(refreshNow, 60_000);
+    return () => window.clearInterval(interval);
+  }, []);
   useEffect(() => {
     try { setSidebarExpanded(localStorage.getItem("unsri-sidebar") === "expanded"); } catch {}
   }, []);
@@ -290,7 +300,7 @@ export function Portal({
   }
   if (initialScreen === "reset-password")
     return <Auth mode="reset-password" configured={configured} />;
-  const greeting = new Date().toLocaleTimeString("en-GB", {
+  const greeting = new Date(now).toLocaleTimeString("en-GB", {
     timeZone: "Asia/Jakarta",
     hour: "2-digit",
     hour12: false,
@@ -404,10 +414,10 @@ export function Portal({
         (orderFilter === "cancelled" && b.status === "cancelled") ||
         (orderFilter === "upcoming" &&
           b.status === "confirmed" &&
-          new Date(b.schedules.departure_at).getTime() > Date.now()) ||
+          new Date(b.schedules.departure_at).getTime() > now) ||
         (orderFilter === "past" &&
           b.status !== "cancelled" &&
-          new Date(b.schedules.departure_at).getTime() <= Date.now())) &&
+          new Date(b.schedules.departure_at).getTime() <= now)) &&
       `${b.booking_code} ${b.profiles?.full_name || ""} ${b.schedules.routes.name}`
         .toLowerCase()
         .includes(orderSearch.toLowerCase()),
@@ -495,7 +505,7 @@ export function Portal({
                   : "Perjalanan Hari Ini"
                 : page === "settings" ? "Pengaturan" : nav.find((n) => n.id === page)?.label}
             </h1>
-            <p>{dateLabel(today())}</p>
+            <p>{dateLabel(currentDay)}</p>
           </div>
           <FeatureSearch admin={admin} onSelect={openFeature} />
           {notificationButton}
@@ -511,7 +521,7 @@ export function Portal({
                   : "Perjalanan Hari Ini"
                 : page === "settings" ? "Pengaturan" : nav.find((n) => n.id === page)?.label}
             </h1>
-            <p>{dateLabel(today())}</p>
+            <p>{dateLabel(currentDay)}</p>
           </div>
           {demo && (
             <div className="demo-ribbon">
@@ -549,7 +559,7 @@ export function Portal({
             <>
               {page === "dashboard" &&
                 (admin ? (
-                  <AdminOverview bundle={bundle} navigate={navigate} />
+                  <AdminOverview bundle={bundle} navigate={navigate} now={now} currentDay={currentDay} />
                 ) : (
                   <Dashboard
                     bookings={bundle.bookings}
@@ -563,6 +573,8 @@ export function Portal({
                     onBook={setReservation}
                     onTicket={setTicket}
                     onFleet={() => setFleetOpen(true)}
+                    now={now}
+                    currentDay={currentDay}
                   />
                 ))}
               {page === "schedules" && (
@@ -588,7 +600,7 @@ export function Portal({
                       Tanggal
                       <input
                         type="date"
-                        min={today()}
+                        min={currentDay}
                         value={filterDate}
                         onChange={(e) => setFilterDate(e.target.value)}
                       />
@@ -650,13 +662,13 @@ export function Portal({
                             {dateLabel(s.departure_at)}
                           </span>
                           <span
-                            className={`tag ${bookable(s) ? "green" : "grey"}`}
+                            className={`tag ${bookable(s, now) ? "green" : "grey"}`}
                           >
                             {s.status === "cancelled"
                               ? "Dibatalkan"
                               : s.available === 0
                                 ? "Penuh"
-                                : !bookable(s)
+                                : !bookable(s, now)
                                   ? "Pemesanan ditutup"
                                   : `${s.available} kursi tersedia`}
                           </span>
@@ -694,7 +706,7 @@ export function Portal({
                           </strong>
                           <button
                             className="button primary"
-                            disabled={!bookable(s) || admin}
+                            disabled={!bookable(s, now) || admin}
                             onClick={() => setReservation(s)}
                           >
                             {s.available === 0 ? "Kursi penuh" : "Pilih kursi"}
@@ -843,9 +855,6 @@ export function Portal({
               {page === "students" && admin && <Students />}
             </>
           )}
-          <p className="app-disclaimer">
-            Prototipe independen, bukan layanan resmi Universitas Sriwijaya.
-          </p>
         </main>
       </div>
       <nav
@@ -1044,14 +1053,18 @@ function Empty({
 function AdminOverview({
   bundle,
   navigate,
+  now,
+  currentDay,
 }: {
   bundle: Bundle;
   navigate: (s: string) => void;
+  now: number;
+  currentDay: string;
 }) {
   const upcoming = bundle.schedules.filter(
     (s) =>
       s.status === "scheduled" &&
-      new Date(s.departure_at).getTime() > Date.now(),
+      new Date(s.departure_at).getTime() > now,
   );
   const capacity = upcoming.reduce((n, s) => n + s.capacity, 0),
     occupied = upcoming.reduce((n, s) => n + s.capacity - s.available, 0);
@@ -1072,7 +1085,7 @@ function AdminOverview({
           [
             Ticket,
             "Pesanan hari ini",
-            bundle.bookings.filter((b) => dateKey(b.created_at) === today())
+            bundle.bookings.filter((b) => dateKey(b.created_at) === currentDay)
               .length,
           ],
           [

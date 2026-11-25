@@ -2,8 +2,6 @@
 
 Reservasi bus kampus berbahasa Indonesia menggunakan **Next.js App Router, React, TypeScript, Tailwind CSS, Supabase Auth, PostgreSQL, dan Realtime**. Dashboard mengikuti referensi desktop/mobile: sidebar, navigasi bawah, kartu tiket hijau, kalender, dan jadwal. Dialog menggunakan primitive Radix dengan pengelolaan fokus dan keyboard.
 
-**Prototipe independen, bukan layanan resmi UNSRI.** Rute, halte, tarif, jadwal, dan identitas contoh harus diverifikasi sebelum penggunaan operasional. Tarif hanya informasi; tidak ada pemrosesan pembayaran.
-
 ## Coba tanpa Supabase
 
 Node.js 22.13+ dan npm:

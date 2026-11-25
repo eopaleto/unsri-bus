@@ -18,5 +18,5 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
   }
   if (["dashboard","admin"].includes(slug) && !profile) redirect("/login");
   if (slug === "admin" && profile?.role !== "admin") redirect("/dashboard");
-  return <Portal initialProfile={profile} initialScreen={slug} configured={ready} />;
+  return <Portal initialProfile={profile} initialScreen={slug} configured={ready} initialNow={new Date().toISOString()} />;
 }
