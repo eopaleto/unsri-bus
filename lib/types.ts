@@ -7,7 +7,7 @@ export type RouteStop = { stop_id: string; stop_order: number; pickup_allowed: b
 export type Route = { id: string; name: string; origin: string; destination: string; is_active: boolean; route_stops: RouteStop[] };
 export type Bus = { id: string; code: string; name: string; plate_number: string; capacity: number; status: string };
 export type Schedule = {
-  id: string; route_id: string; bus_id: string; departure_at: string; arrival_at: string;
+  id: string; route_id: string; bus_id: string; departure_at: string; arrival_at: string; created_at?: string;
   fare_idr: number; status: string; routes: Route; buses: Bus; available: number; capacity: number;
 };
 export type Seat = { id: string; seat_label: string; row_no: number; col_no: number; occupied: boolean };

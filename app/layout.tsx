@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 export const metadata: Metadata = {
-  title: "UNSRI Bus — Perjalanan Kampus Lebih Mudah",
+  title: "Unsri Bus | Perjalanan Kampus Lebih Mudah",
   description:
     "Jadwal bus, reservasi kursi, tiket digital, dan bantuan mahasiswa UNSRI.",
   icons: { icon: "/favicon.svg" },

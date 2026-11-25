@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { ArrowDown, ArrowUp, Pencil, Plus, Trash2, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Pencil, Plus, Search, Trash2, X } from "lucide-react";
 import type { Bus, Route, Schedule, Stop } from "@/lib/types";
-import { dateLabel, timeLabel } from "@/lib/utils";
+import { dateKey, dateLabel, timeLabel, today } from "@/lib/utils";
 import { Dialog } from "./ui/dialog";
 import { request } from "./auth";
 type Entity = Bus | Route | Schedule | Stop;
@@ -32,6 +32,10 @@ export function Management({
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   const [stopIds, setStopIds] = useState<string[]>([]);
+  const [scheduleSearch, setScheduleSearch] = useState("");
+  const [scheduleStatus, setScheduleStatus] = useState("all");
+  const [schedulePeriod, setSchedulePeriod] = useState("all");
+  const [scheduleOrder, setScheduleOrder] = useState("created");
   const titles: Record<string, string> = {
     schedule: "Jadwal",
     bus: "Armada",
@@ -142,6 +146,36 @@ export function Management({
           .toISOString()
           .slice(0, 16)
       : "";
+  const scheduleStatuses = [...new Set(schedules.map((schedule) => schedule.status))].sort();
+  const normalizedSearch = scheduleSearch.trim().toLocaleLowerCase("id-ID");
+  const visibleSchedules = schedules
+    .filter((schedule) => {
+      if (scheduleStatus !== "all" && schedule.status !== scheduleStatus) return false;
+      const departure = new Date(schedule.departure_at).getTime();
+      if (schedulePeriod === "upcoming" && departure < Date.now()) return false;
+      if (schedulePeriod === "past" && departure >= Date.now()) return false;
+      if (schedulePeriod === "today" && dateKey(schedule.departure_at) !== today()) return false;
+      if (!normalizedSearch) return true;
+      const searchable = [
+        schedule.routes.origin,
+        schedule.routes.destination,
+        schedule.routes.name,
+        schedule.buses.name,
+        schedule.buses.plate_number,
+        dateLabel(schedule.departure_at, true),
+        timeLabel(schedule.departure_at),
+        schedule.status,
+      ].join(" ").toLocaleLowerCase("id-ID");
+      return searchable.includes(normalizedSearch);
+    })
+    .sort((a, b) => {
+      if (scheduleOrder === "created") {
+        const createdDifference = new Date(a.created_at || a.departure_at).getTime() - new Date(b.created_at || b.departure_at).getTime();
+        if (createdDifference) return -createdDifference;
+      }
+      const difference = new Date(a.departure_at).getTime() - new Date(b.departure_at).getTime();
+      return scheduleOrder === "departure-oldest" ? difference : -difference;
+    });
   return (
     <>
       <div className="page-heading">
@@ -165,6 +199,54 @@ export function Management({
         ))}
       </div>
       <section className="panel">
+        {tab === "schedule" && (
+          <div className="management-filters">
+            <label className="management-filter-search">
+              <Search size={17} />
+              <input
+                type="search"
+                aria-label="Cari jadwal, rute, atau armada"
+                placeholder="Cari rute, bus, tanggal…"
+                value={scheduleSearch}
+                onChange={(event) => setScheduleSearch(event.target.value)}
+              />
+            </label>
+            <select
+              aria-label="Filter status jadwal"
+              value={scheduleStatus}
+              onChange={(event) => setScheduleStatus(event.target.value)}
+            >
+              <option value="all">Semua status</option>
+              {scheduleStatuses.map((status) => (
+                <option value={status} key={status}>
+                  {status === "scheduled" ? "Terjadwal" : status === "cancelled" ? "Dibatalkan" : status}
+                </option>
+              ))}
+            </select>
+            <select
+              aria-label="Filter waktu keberangkatan"
+              value={schedulePeriod}
+              onChange={(event) => setSchedulePeriod(event.target.value)}
+            >
+              <option value="all">Semua tanggal</option>
+              <option value="today">Hari ini</option>
+              <option value="upcoming">Akan datang</option>
+              <option value="past">Sudah lewat</option>
+            </select>
+            <select
+              aria-label="Urutkan jadwal"
+              value={scheduleOrder}
+              onChange={(event) => setScheduleOrder(event.target.value)}
+            >
+              <option value="created">Data ditambahkan terbaru</option>
+              <option value="departure-oldest">Keberangkatan terdekat</option>
+              <option value="departure-newest">Tanggal keberangkatan terbaru</option>
+            </select>
+            <p className="management-filter-count">
+              {visibleSchedules.length} dari {schedules.length} jadwal
+            </p>
+          </div>
+        )}
         <div className="table-scroll">
           <table className="management-table">
             <thead>
@@ -185,7 +267,7 @@ export function Management({
             </thead>
             <tbody>
               {tab === "schedule" &&
-                schedules.map((s) => (
+                visibleSchedules.map((s) => (
                   <tr key={s.id}>
                     <td>
                       <strong>
@@ -305,7 +387,7 @@ export function Management({
         </div>
         {!(
           tab === "schedule"
-            ? schedules
+            ? visibleSchedules
             : tab === "bus"
               ? buses
               : tab === "route"
@@ -313,8 +395,8 @@ export function Management({
                 : stops
         ).length && (
           <div className="inline-empty">
-            <h3>Belum ada {titles[tab].toLowerCase()}</h3>
-            <p>Tambahkan data pertama untuk mulai mengelola perjalanan.</p>
+            <h3>{tab === "schedule" && schedules.length ? "Tidak ada jadwal yang cocok" : `Belum ada ${titles[tab].toLowerCase()}`}</h3>
+            <p>{tab === "schedule" && schedules.length ? "Coba ubah kata kunci atau filter yang dipilih." : "Tambahkan data pertama untuk mulai mengelola perjalanan."}</p>
           </div>
         )}
       </section>

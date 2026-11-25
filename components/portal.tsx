@@ -82,19 +82,19 @@ const emptyBundle: Bundle = {
   notices: [],
 };
 const studentNav = [
-  { id: "dashboard", icon: House, label: "Dashboard" },
-  { id: "orders", icon: Ticket, label: "Pesanan" },
-  { id: "schedules", icon: CalendarDays, label: "Jadwal" },
-  { id: "chat", icon: MessageCircle, label: "Chat" },
-  { id: "profile", icon: UserRound, label: "Profil" },
+  { id: "dashboard", icon: House, label: "Dashboard", mobileLabel: "Beranda" },
+  { id: "orders", icon: Ticket, label: "Pesanan", mobileLabel: "Pesanan" },
+  { id: "schedules", icon: CalendarDays, label: "Jadwal", mobileLabel: "Jadwal" },
+  { id: "chat", icon: MessageCircle, label: "Chat", mobileLabel: "Chat" },
+  { id: "profile", icon: UserRound, label: "Profil", mobileLabel: "Profil" },
 ];
 const adminNav = [
-  { id: "dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { id: "manage", icon: Settings2, label: "Kelola" },
-  { id: "orders", icon: Ticket, label: "Pesanan" },
-  { id: "students", icon: Users, label: "Mahasiswa" },
-  { id: "chat", icon: MessageCircle, label: "Chat" },
-  { id: "profile", icon: UserRound, label: "Profil" },
+  { id: "dashboard", icon: LayoutDashboard, label: "Dashboard", mobileLabel: "Beranda" },
+  { id: "manage", icon: Settings2, label: "Kelola", mobileLabel: "Kelola" },
+  { id: "orders", icon: Ticket, label: "Pesanan", mobileLabel: "Pesanan" },
+  { id: "students", icon: Users, label: "Mahasiswa", mobileLabel: "Mhs." },
+  { id: "chat", icon: MessageCircle, label: "Chat", mobileLabel: "Chat" },
+  { id: "profile", icon: UserRound, label: "Profil", mobileLabel: "Profil" },
 ];
 
 export function Portal({
@@ -867,7 +867,7 @@ export function Portal({
                 <n.icon size={23} />
               )}
             </span>
-            <small>{n.label}</small>
+            <small>{n.mobileLabel}</small>
             {n.id === "chat" && chatUnread > 0 && (
               <b className="chat-unread" aria-hidden="true">{chatUnread > 9 ? "9+" : chatUnread}</b>
             )}
